@@ -3,19 +3,47 @@
 // Dependencies
 // ===========================================================
 const express = require("express");
-const baseAPI = require('./index.js')
+const baseAPI = require('./index.js');
 const bodyParser = require("body-parser");
 const path = require("path");
-
 
 const app = express();
 var PORT = process.env.PORT || 3000;
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
 console.log(baseAPI);
 
-app.get('/api', baseAPI);
-// app.get('/api/:char', (req, res) => { res.end() });
-// app.get('/api/list', (req, res) => { res.end() });
+var reservations = [
+  {
+    routeName: "tim",
+    name: "Tim Cooley",
+    email: "xyz@xyz.com",
+    phone: '555-555-5555'
+  },
+  {
+    routeName: "2",
+    name: "Tim Cooley",
+    email: "xyz@xyz.com",
+    phone: '555-555-5555'
+  },
+  {
+    routeName: "3",
+    name: "Tim Cooley",
+    email: "xyz@xyz.com",
+    phone: '555-555-5555'
+  },
+  {
+    routeName: "4",
+    name: "Tim Cooley",
+    email: "xyz@xyz.com",
+    phone: '555-555-5555'
+  }
+];
+
+// app.get('/api', baseAPI);
+
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
@@ -28,40 +56,42 @@ app.get("/view", (req, res) => {
   res.sendFile(path.join(__dirname, "view.html"));
 });
 
+// Search for Specific Character (or all reservations) - provides JSON
+app.get("/api/:reservations?", function(req, res) {
+  var chosen = req.params.reservations;
+
+  if (chosen) {
+    console.log(chosen);
+
+    for (var i = 0; i < reservations.length; i++) {
+      if (chosen === reservations[i].routeName) {
+        return res.json(reservations[i]);
+      }
+    }
+
+    return res.json(false);
+  }
+  return res.json(reservations);
+});
+
+// Create New reservations - takes in JSON input
+app.post("/api/new", function(req, res) {
+  // req.body hosts is equal to the JSON post sent from the user
+  // This works because of our body-parser middleware
+  var newreservation = req.body;
+  newreservation.routeName = newreservation.name.replace(/\s+/g, "").toLowerCase();
+
+  console.log(newreservation);
+
+  reservations.push(newreservation);
+
+  res.json(newreservation);
+});
+
+console.log(reservations[0]);
+
 
 app.listen(process.env.PORT || 3000, function() {
   console.log("App listening on PORT " + PORT);
 });
-
-//Endpoints. Maybe constructors.
-var yoda = {
-  name: "Yoda",
-  role: "Jedi Master",
-  age: 900,
-  forcePoints: 2000
-};
-
-var darthmaul = {
-  name: "Darth Maul",
-  role: "Sith Lord",
-  age: 200,
-  forcePoints: 1200
-};
-
-var obiwan = {
-  name: "Obi Wan Kenobi",
-  role: "Jedi Master",
-  age: 600,
-  forcePoints: 1700
-};
-// * Create a few array variables that will hold the data
-//
-// * Create a set of routes for getting and posting table data
-//
-// * Create a set of routes for displaying the HTML pages
-//
-// * Use jQuery to run AJAX calls to GET and POST data from users to the Express serve
-
-// Generate express connection
-// Endpoints
-// Data Store diffferent
+5
