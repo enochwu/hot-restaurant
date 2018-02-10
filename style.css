@@ -1,8 +1,15 @@
-.jumbotron {
+.jumbotron, .panel-default {
 	margin: auto;
     width: 90%;
-    border: 3px solid pink;
     padding: 10px;
     text-align: center;
 
 }
+
+.panel-default {
+	margin: auto;
+	border: 3px solid red;
+
+    width: 90%;
+    padding: 10px;
+    text-align: left;
