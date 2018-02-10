@@ -2,9 +2,96 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>Restaurant reservations</title>
+    <!-- Reset CSS -->
+    <link rel='stylesheet' href='reset.css' type='text/css'>
+    <!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<!-- Main stylesheet -->
+		<link rel='stylesheet' href='style2.css' type='text/css'>
+		<!-- JQuery minified -->
+		<script
+  	src="http://code.jquery.com/jquery-3.3.1.min.js"
+  	integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  	crossorigin="anonymous"></script>
+		<!-- Bootstrap JS -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   </head>
   <body>
+  	<div class="panel panel-default">
+		  <div class="panel-heading">Current reservations</div>
+		  <div class="panel-body" id="res-list"></div>
+		</div>
+
+  	<div class="panel panel-default">
+		  <div class="panel-heading">Waitlist</div>
+		  <div class="panel-body" id="waitlist"></div>
+		</div>
+
+		<script type='text/javascript'>
+
+			// var express = require('express');
+			var restaurants = [{
+				name: 'rest1',
+				phone: '603-818-1151',
+				email: 'bg@gmail.com',
+				id: 123
+			},
+			{
+				name: 'rest2',
+				phone: '603-898-1312',
+				email: 'hello@yahoo.com',
+				id: 456
+			},
+			{
+				name: 'rest3',
+				phone: '415-823-3851',
+				email: '111@hotmail.com',
+				id: 789
+			}]
+
+
+			function getReservations() {
+
+				$.ajax({
+					method: 'GET',
+					url: 'https://www.google.com',
+				}).then(function(response) {})
+
+				var count = 1;
+
+				restaurants.forEach((res) => {
+					console.log(count);
+					if (count <= 2) {
+						createDiv(res,'main',count);
+						count++;
+					} else {
+						createDiv(res,'waitlist',count);
+						count++;
+					}
+				});
+
+			}
+
+			function createDiv(res,param,count) {
+				// var res = {name:'test',email:'asdf@123.com',id:134};
+				var resNum = $('<div></div>').attr('class','res-num').text(count);
+				var resName = $('<p></p>').attr('class','res-name').text(res.name);
+				var resDiv = $('<div></div>').attr('class','reservation');
+				resDiv.append(resNum);
+				resDiv.append(resName);
+				if (param === 'main') {
+					$('#res-list').append(resDiv);
+				}
+				if (param === 'waitlist') {
+					$('#waitlist').append(resDiv);
+				}
+			}
+
+			getReservations();
+
+		</script>
+
 
   </body>
 </html>
